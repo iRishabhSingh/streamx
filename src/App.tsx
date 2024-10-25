@@ -1,5 +1,11 @@
+import DropZone from "@/components/drop-zone";
+
 function App() {
-  return <></>;
+  return (
+    <DropZone>
+      <></>
+    </DropZone>
+  );
 }
 
 export default App;
