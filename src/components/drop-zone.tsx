@@ -48,7 +48,7 @@ const DropZone: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="z-20 h-full w-full">{children}</div>
 
       {isDragging && (
-        <div className="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center text-center backdrop-blur-lg">
+        <div className="absolute left-0 top-0 z-40 flex h-full w-full flex-col items-center justify-center text-center backdrop-blur-lg">
           <div className="relative">
             {/* Main Upload Icon Box */}
             <div
