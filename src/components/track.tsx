@@ -1,26 +1,20 @@
 import { motion } from "framer-motion";
 
-import {
-  AudioIcon,
-  DotsVerticalIcon,
-  GridIcon,
-  HeartIcon,
-  LoopIcon,
-  VideoIcon,
-} from "@/assets";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { truncateTrackName } from "@/utils/formatUtils";
 import type { Track as TrackProp } from "@/types/mediaTypes";
+import TrackActionsMenu from "@/components/track-action-menu";
+import { AudioIcon, GridIcon, HeartIcon, LoopIcon, VideoIcon } from "@/assets";
 
 const Track: React.FC<{ track: TrackProp }> = ({
+  track,
   track: { name, isFavorite, mediaCategory },
 }) => {
   return (
     <motion.article className="relative mx-auto mt-4 flex w-full items-center rounded-sm bg-neutral-900/10 dark:bg-neutral-400/10">
       {/* Drag Handle */}
       <motion.div
-        tabIndex={0}
         title="Drag to reorder"
         className="cursor-move rounded-sm p-2 opacity-60 hover:opacity-80"
       >
@@ -67,13 +61,7 @@ const Track: React.FC<{ track: TrackProp }> = ({
           </Toggle>
 
           {/* Options Menu */}
-          <Button
-            variant="ghost"
-            aria-label="Track Option Menu"
-            className="hidden h-9 w-9 rounded-full p-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900 md:flex"
-          >
-            <DotsVerticalIcon />
-          </Button>
+          <TrackActionsMenu track={track} />
         </div>
       </motion.div>
     </motion.article>
