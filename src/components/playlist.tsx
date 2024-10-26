@@ -1,5 +1,12 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 
+import {
+  clearPlaylistTracks,
+  toggleAutoPlay,
+  toggleLoopMode,
+  toggleShuffleMode,
+} from "@/features/playlist/playlistActions";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Toggle } from "@/components/ui/toggle";
@@ -7,7 +14,10 @@ import { LoopIcon, RemoveIcon, ShuffleIcon } from "@/assets";
 import type { Playlist as PlaylistProp } from "@/types/mediaTypes";
 
 const Playlist: React.FC<{ playlist: PlaylistProp }> = ({ playlist }) => {
-  const { tracks, isAutoPlayEnabled } = playlist;
+  const dispatch = useDispatch();
+
+  const { tracks, isPlaylistLoopEnabled, isShuffleActive, isAutoPlayEnabled } =
+    playlist;
 
   return (
     <div className="rounded-lg border">
@@ -22,6 +32,7 @@ const Playlist: React.FC<{ playlist: PlaylistProp }> = ({ playlist }) => {
           <Button
             variant="ghost"
             aria-label="AutoPlay"
+            onClick={() => toggleAutoPlay(isAutoPlayEnabled, dispatch)}
             className="h-12 w-12 rounded-full bg-transparent px-2"
           >
             <Switch
@@ -31,12 +42,20 @@ const Playlist: React.FC<{ playlist: PlaylistProp }> = ({ playlist }) => {
           </Button>
 
           {/* Loop Toggle */}
-          <Toggle aria-label="Loop" className="h-12 w-12 rounded-full p-2">
+          <Toggle
+            aria-label="Loop"
+            className="h-12 w-12 rounded-full p-2"
+            onClick={() => toggleLoopMode(isPlaylistLoopEnabled, dispatch)}
+          >
             <LoopIcon size={16} />
           </Toggle>
 
           {/* Shuffle Toggle */}
-          <Toggle aria-label="Shuffle" className="h-12 w-12 rounded-full p-2">
+          <Toggle
+            aria-label="Shuffle"
+            className="h-12 w-12 rounded-full p-2"
+            onClick={() => toggleShuffleMode(isShuffleActive, dispatch)}
+          >
             <ShuffleIcon size={16} />
           </Toggle>
 
@@ -44,6 +63,7 @@ const Playlist: React.FC<{ playlist: PlaylistProp }> = ({ playlist }) => {
           <Button
             variant="ghost"
             aria-label="Clear Playlist"
+            onClick={() => clearPlaylistTracks(dispatch)}
             className="flex h-12 w-12 items-center justify-center rounded-full p-2 text-red-600 hover:bg-red-400/20 hover:text-red-600 dark:text-red-400 dark:hover:bg-red-600/20 dark:hover:text-red-400"
           >
             <RemoveIcon size={16} />

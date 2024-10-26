@@ -22,6 +22,14 @@ export const playlistSlice = createSlice({
   reducers,
 });
 
-export const { addTrack } = playlistSlice.actions;
+export const {
+  addTrack,
+  resetPlaylist,
+  setTracks,
+  setPlayingStatus,
+  setLoopStatus,
+  setShuffleStatus,
+  setAutoPlayStatus,
+} = playlistSlice.actions;
 
 export default playlistSlice.reducer;
