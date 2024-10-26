@@ -24,7 +24,7 @@ export const handleValidMediaFiles = async (
     mediaElement.addEventListener("loadedmetadata", () => {
       const track: Track = {
         id: fileUrl.substring(fileUrl.lastIndexOf("/") + 1),
-        name: file.name,
+        name: file.name.substring(0, file.name.lastIndexOf(".")),
         url: fileUrl,
         mediaCategory: mediaType,
         fileFormat: file.name.substring(file.name.lastIndexOf(".") + 1),

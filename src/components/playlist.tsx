@@ -7,6 +7,8 @@ import {
   toggleLoopMode,
   toggleShuffleMode,
 } from "@/features/playlist/playlistActions";
+
+import Track from "@/components/track";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Toggle } from "@/components/ui/toggle";
@@ -74,11 +76,7 @@ const Playlist: React.FC<{ playlist: PlaylistProp }> = ({ playlist }) => {
       {/* Track List Section */}
       <div className="mx-4 mb-4 max-h-[40vh] overflow-scroll">
         {tracks.map((track) => (
-          <div key={track.id} className="my-2">
-            {track.name.length > 20
-              ? `${track.name.substring(0, 17)}...`
-              : track.name}
-          </div>
+          <Track key={track.id} track={track} />
         ))}
       </div>
     </div>
