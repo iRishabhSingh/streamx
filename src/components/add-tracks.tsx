@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { cn } from "@/lib/utils";
 import { RootState } from "@/app/store";
+import Playlist from "@/components/playlist";
 import { PlusIcon, UploadIcon } from "@/assets";
 import { Button } from "@/components/ui/button";
 import { handleValidMediaFiles } from "@/utils/handleMediaFiles";
@@ -23,8 +24,9 @@ const AddTracks = () => {
   const fileInputRef = useRef<HTMLInputElement>(null); // Ref to trigger file input
   const dispatch = useDispatch();
 
-  // Access tracks from the Redux state
-  const tracks = useSelector((state: RootState) => state.tracks);
+  // Access playlist from the Redux state
+  const playlist = useSelector((state: RootState) => state);
+  const { tracks } = playlist;
 
   // Handle file input change, filter valid audio/video files, and dispatch an action
   const handleFileChange = (newFiles: File[]): void => {
@@ -78,14 +80,7 @@ const AddTracks = () => {
           {/* File upload icon and animation */}
           <div className="relative mx-auto mt-10 w-full max-w-xl">
             {/* Display tracks from the playlist if they exist */}
-            {tracks.length > 0 &&
-              tracks.map((track) => (
-                <div key={track.id} className="my-2">
-                  {track.name.length > 20
-                    ? `${track.name.substring(0, 17)}...`
-                    : track.name}
-                </div>
-              ))}
+            {tracks.length > 0 && <Playlist playlist={playlist} />}
 
             {/* Action buttons when tracks exist */}
             {tracks.length > 0 && (
