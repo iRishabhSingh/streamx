@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+import { CSS } from "@dnd-kit/utilities";
 import { useDispatch } from "react-redux";
+import { useSortable } from "@dnd-kit/sortable";
 
 import {
   toggleFavorite,
@@ -19,12 +21,26 @@ const Track: React.FC<{ track: TrackProp }> = ({
 }) => {
   const dispatch = useDispatch();
 
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: track.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
-    <motion.article className="relative mx-auto mt-4 flex w-full items-center rounded-sm bg-neutral-900/10 dark:bg-neutral-400/10">
+    <motion.article
+      style={style}
+      {...attributes}
+      ref={setNodeRef}
+      className="relative mx-auto mt-4 flex w-full items-center rounded-sm bg-neutral-900/10 dark:bg-neutral-400/10"
+    >
       {/* Drag Handle */}
       <motion.div
+        {...listeners}
         title="Drag to reorder"
-        className="cursor-move rounded-sm p-2 opacity-60 hover:opacity-80"
+        className="cursor-move touch-none rounded-sm p-2 opacity-60 hover:opacity-80"
       >
         <GridIcon size={20} />
       </motion.div>
