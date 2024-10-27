@@ -24,14 +24,26 @@ import {
 
 import { Button } from "@/components/ui/button";
 import type { Track } from "@/types/mediaTypes";
+import ConfirmationPopup from "@/components/confirmation-popup";
 import TrackDetailsPopup from "@/components/track-details-popup";
 
 const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   const { isFavorite, isLoopActive, shouldBeSkipped } = track;
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isTrackLiked, setIsTrackLiked] = useState(isFavorite);
+
   const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    if (isFavorite) return setIsTrackLiked(true);
+    deleteTrack(track.id, dispatch);
+  };
+
+  const forceDelete = () => {
+    deleteTrack(track.id, dispatch);
+    setIsDialogOpen(false);
+  };
 
   return (
     <>
@@ -96,7 +108,7 @@ const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
 
           {/* Delete Track Action */}
           <DropdownMenuItem
-            onClick={() => deleteTrack(track.id, dispatch)}
+            onClick={handleDelete}
             aria-label="Delete track"
             className="flex items-center gap-4 rounded text-red-600 dark:text-red-400"
           >
@@ -111,6 +123,14 @@ const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
         track={track}
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+      />
+
+      <ConfirmationPopup
+        open={isTrackLiked}
+        confirmText="Delete"
+        onConfirm={forceDelete}
+        onOpenChange={setIsTrackLiked}
+        message="Are you sure you want to delete this track you liked?"
       />
     </>
   );
