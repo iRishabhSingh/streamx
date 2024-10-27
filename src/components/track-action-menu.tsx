@@ -1,3 +1,5 @@
+import { useDispatch } from "react-redux";
+
 import {
   InfoIcon,
   LoopIcon,
@@ -12,11 +14,20 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  deleteTrack,
+  toggleFavorite,
+  toggleLoopActive,
+  toggleSkipStatus,
+} from "@/features/playlist/helpers/trackHelpers";
+
 import { Button } from "@/components/ui/button";
 import type { Track } from "@/types/mediaTypes";
 
 const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
   const { isFavorite, isLoopActive, shouldBeSkipped } = track;
+
+  const dispatch = useDispatch();
 
   return (
     <DropdownMenu>
@@ -33,6 +44,7 @@ const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
       <DropdownMenuContent className="w-48 rounded">
         {/* Like/Unlike Action */}
         <DropdownMenuItem
+          onClick={() => toggleFavorite(track, dispatch)}
           className="flex items-center gap-4 rounded md:hidden"
           aria-label={isFavorite ? "Unlike track" : "Like Track"}
         >
@@ -46,6 +58,7 @@ const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
 
         {/* Loop Action */}
         <DropdownMenuItem
+          onClick={() => toggleLoopActive(track, dispatch)}
           className="flex items-center gap-4 rounded md:hidden"
           aria-label={isLoopActive ? "Disable Loop" : "Loop"}
         >
@@ -55,6 +68,7 @@ const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
 
         {/* Skip Action */}
         <DropdownMenuItem
+          onClick={() => toggleSkipStatus(track, dispatch)}
           className="flex items-center gap-4 rounded"
           aria-label={shouldBeSkipped ? "Don't skip" : "Skip track"}
         >
@@ -76,6 +90,7 @@ const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
 
         {/* Delete Track Action */}
         <DropdownMenuItem
+          onClick={() => deleteTrack(track.id, dispatch)}
           aria-label="Delete track"
           className="flex items-center gap-4 rounded text-red-600 dark:text-red-400"
         >

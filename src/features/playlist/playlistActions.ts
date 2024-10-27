@@ -1,12 +1,15 @@
 import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 
 import {
+  removeTrack,
+  updateTrack,
   resetPlaylist,
   setAutoPlayStatus,
   setLoopStatus,
   setPlayingStatus,
   setShuffleStatus,
 } from "@/features/playlist/playlistSlice";
+import { Track } from "@/types/mediaTypes";
 
 export const togglePlaylistPlaying = (
   isPlaylistPlaying: boolean,
@@ -38,4 +41,21 @@ export const toggleAutoPlay = (
 
 export const clearPlaylistTracks = (dispatch: Dispatch<UnknownAction>) => {
   dispatch(resetPlaylist());
+};
+
+// Track Controls
+export const toggleTrackField = (
+  track: Track,
+  field: keyof Track,
+  dispatch: Dispatch<UnknownAction>,
+) => {
+  const updatedTrack = { ...track, [field]: !track[field] };
+  dispatch(updateTrack(updatedTrack));
+};
+
+export const removeTrackById = (
+  trackId: string,
+  dispatch: Dispatch<UnknownAction>,
+) => {
+  dispatch(removeTrack(trackId));
 };

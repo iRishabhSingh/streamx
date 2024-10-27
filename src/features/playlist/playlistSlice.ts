@@ -30,6 +30,10 @@ export const {
   setLoopStatus,
   setShuffleStatus,
   setAutoPlayStatus,
+
+  // Track's Reducers
+  removeTrack,
+  updateTrack,
 } = playlistSlice.actions;
 
 export default playlistSlice.reducer;

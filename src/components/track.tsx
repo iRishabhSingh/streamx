@@ -1,4 +1,10 @@
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+
+import {
+  toggleFavorite,
+  toggleLoopActive,
+} from "@/features/playlist/helpers/trackHelpers";
 
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
@@ -11,6 +17,8 @@ const Track: React.FC<{ track: TrackProp }> = ({
   track,
   track: { name, isFavorite, mediaCategory },
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <motion.article className="relative mx-auto mt-4 flex w-full items-center rounded-sm bg-neutral-900/10 dark:bg-neutral-400/10">
       {/* Drag Handle */}
@@ -44,6 +52,7 @@ const Track: React.FC<{ track: TrackProp }> = ({
           <Button
             variant="ghost"
             aria-label="Toggle Favorite"
+            onClick={() => toggleFavorite(track, dispatch)}
             className="hidden h-9 w-9 rounded-full p-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900 md:flex"
           >
             <HeartIcon
@@ -55,6 +64,7 @@ const Track: React.FC<{ track: TrackProp }> = ({
           {/* Loop toggle Button */}
           <Toggle
             aria-label="Loop"
+            onClick={() => toggleLoopActive(track, dispatch)}
             className="hidden h-9 w-9 rounded-full p-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900 md:flex"
           >
             <LoopIcon size={16} />
