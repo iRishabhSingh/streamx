@@ -1,26 +1,18 @@
 import { motion } from "framer-motion";
 import { CSS } from "@dnd-kit/utilities";
-import { useDispatch } from "react-redux";
 import { useSortable } from "@dnd-kit/sortable";
 
-import {
-  toggleFavorite,
-  toggleLoopActive,
-} from "@/features/playlist/helpers/trackHelpers";
-
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
+import { AudioIcon, GridIcon, VideoIcon } from "@/assets";
 import { truncateTrackName } from "@/utils/formatUtils";
 import type { Track as TrackProp } from "@/types/mediaTypes";
 import TrackActionsMenu from "@/components/track-action-menu";
-import { AudioIcon, GridIcon, HeartIcon, LoopIcon, VideoIcon } from "@/assets";
+import LoopToggleButton from "@/components/track-controls/loop-toggle-button";
+import FavoriteToggleButton from "@/components/track-controls/favorite-toggle-button";
 
 const Track: React.FC<{ track: TrackProp }> = ({
   track,
-  track: { name, isFavorite, mediaCategory },
+  track: { name, mediaCategory },
 }) => {
-  const dispatch = useDispatch();
-
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: track.id });
 
@@ -64,27 +56,11 @@ const Track: React.FC<{ track: TrackProp }> = ({
 
         {/* Action Buttons */}
         <div className="flex flex-shrink-0 items-center gap-3">
-          {/* Favorite toggle Button */}
-          <Button
-            variant="ghost"
-            aria-label="Toggle Favorite"
-            onClick={() => toggleFavorite(track, dispatch)}
-            className="hidden h-9 w-9 rounded-full p-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900 md:flex"
-          >
-            <HeartIcon
-              variant={isFavorite ? "filled" : "outlined"}
-              fill={isFavorite ? "#FF3040" : "currentColor"}
-            />
-          </Button>
+          {/* Favorite Toggle Button */}
+          <FavoriteToggleButton track={track} />
 
-          {/* Loop toggle Button */}
-          <Toggle
-            aria-label="Loop"
-            onClick={() => toggleLoopActive(track, dispatch)}
-            className="hidden h-9 w-9 rounded-full p-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900 md:flex"
-          >
-            <LoopIcon size={16} />
-          </Toggle>
+          {/* Loop Toggle Button */}
+          <LoopToggleButton track={track} />
 
           {/* Options Menu */}
           <TrackActionsMenu track={track} />

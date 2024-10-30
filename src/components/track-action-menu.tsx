@@ -2,43 +2,29 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import {
-  InfoIcon,
-  LoopIcon,
-  SkipIcon,
-  HeartIcon,
-  RemoveIcon,
-  DotsVerticalIcon,
-} from "@/assets";
-import {
   DropdownMenu,
-  DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  deleteTrack,
-  toggleFavorite,
-  toggleLoopActive,
-  toggleSkipStatus,
-} from "@/features/playlist/helpers/trackHelpers";
-
+import { DotsVerticalIcon } from "@/assets";
 import { Button } from "@/components/ui/button";
 import type { Track } from "@/types/mediaTypes";
 import ConfirmationPopup from "@/components/confirmation-popup";
 import TrackDetailsPopup from "@/components/track-details-popup";
+import { deleteTrack } from "@/features/playlist/helpers/trackHelpers";
+import LoopDropdownAction from "@/components/track-controls/dropdown-actions/loop-dropdown-action";
+import SkipDropdownAction from "@/components/track-controls/dropdown-actions/skip-dropdown-action";
+import DeleteDropdownAction from "@/components/track-controls/dropdown-actions/delete-dropdown-action";
+import FavoriteDropdownAction from "@/components/track-controls/dropdown-actions/favorite-dropdown-action";
+import MoreDetailsDropdownAction from "@/components/track-controls/dropdown-actions/more-details-dropdown-action";
 
 const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
-  const { isFavorite, isLoopActive, shouldBeSkipped } = track;
+  const { isFavorite } = track;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isTrackLiked, setIsTrackLiked] = useState(isFavorite);
 
   const dispatch = useDispatch();
-
-  const handleDelete = () => {
-    if (isFavorite) return setIsTrackLiked(true);
-    deleteTrack(track.id, dispatch);
-  };
 
   const forceDelete = () => {
     deleteTrack(track.id, dispatch);
@@ -59,66 +45,17 @@ const TrackActionsMenu: React.FC<{ track: Track }> = ({ track }) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent className="w-48 rounded">
-          {/* Like/Unlike Action */}
-          <DropdownMenuItem
-            onClick={() => toggleFavorite(track, dispatch)}
-            className="flex items-center gap-4 rounded md:hidden"
-            aria-label={isFavorite ? "Unlike track" : "Like Track"}
-          >
-            <HeartIcon
-              size={20}
-              variant={isFavorite ? "filled" : "outlined"}
-              fill={isFavorite ? "#FF3040" : "currentColor"}
-            />
-            <span>{isFavorite ? "Unlike" : "Like"}</span>
-          </DropdownMenuItem>
-
-          {/* Loop Action */}
-          <DropdownMenuItem
-            onClick={() => toggleLoopActive(track, dispatch)}
-            className="flex items-center gap-4 rounded md:hidden"
-            aria-label={isLoopActive ? "Disable Loop" : "Loop"}
-          >
-            <LoopIcon size={20} />
-            <span>{isLoopActive ? "Disable Loop" : "Loop"}</span>
-          </DropdownMenuItem>
-
-          {/* Skip Action */}
-          <DropdownMenuItem
-            onClick={() => toggleSkipStatus(track, dispatch)}
-            className="flex items-center gap-4 rounded"
-            aria-label={shouldBeSkipped ? "Don't skip" : "Skip track"}
-          >
-            <SkipIcon
-              variant={shouldBeSkipped ? "filled" : "outlined"}
-              size={20}
-            />
-            <span>{shouldBeSkipped ? "Don't skip" : "Skip track"}</span>
-          </DropdownMenuItem>
-
-          {/* More Details Action */}
-          <DropdownMenuItem
-            onClick={() => setIsDialogOpen(true)} // Open the dialog
-            aria-label="More details"
-            className="flex items-center gap-4 rounded"
-          >
-            <InfoIcon size={20} />
-            <span>More details</span>
-          </DropdownMenuItem>
-
-          {/* Delete Track Action */}
-          <DropdownMenuItem
-            onClick={handleDelete}
-            aria-label="Delete track"
-            className="flex items-center gap-4 rounded text-red-600 dark:text-red-400"
-          >
-            <RemoveIcon />
-            <span>Delete Track</span>
-          </DropdownMenuItem>
+          <FavoriteDropdownAction track={track} />
+          <LoopDropdownAction track={track} />
+          <SkipDropdownAction track={track} />
+          <MoreDetailsDropdownAction onClick={() => setIsDialogOpen(true)} />
+          <DeleteDropdownAction
+            track={track}
+            onDelete={() => setIsTrackLiked(true)}
+          />
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Track's Details showing Popup Component */}
       <TrackDetailsPopup
         track={track}
         open={isDialogOpen}
