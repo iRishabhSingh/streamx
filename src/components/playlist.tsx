@@ -16,31 +16,33 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import type {
-  Track as TrackProp,
-  Playlist as PlaylistProp,
-} from "@/types/mediaTypes";
 import Track from "@/components/track";
+import { RootState } from "@/app/store";
+import type { Track as TrackProp } from "@/types/mediaTypes";
 import { setTracks } from "@/features/playlist/playlistSlice";
 import AutoPlaySwitch from "@/components/playlist-controls/auto-play-switch";
 import PlaylistLoopToggle from "@/components/playlist-controls/playlist-loop-toggle";
 import ClearPlaylistButton from "@/components/playlist-controls/clear-playlist-button";
 import PlaylistShuffleToggle from "@/components/playlist-controls/playlist-shuffle-toggle";
 
-const Playlist: React.FC<{ playlist: PlaylistProp }> = ({
-  playlist: {
-    tracks,
-    isShuffleActive,
-    isAutoPlayEnabled,
-    isPlaylistLoopEnabled,
-  },
-}) => {
+const Playlist = () => {
   const [activeTrack, setActiveTrack] = useState<TrackProp | null>(null);
 
   const dispatch = useDispatch();
+
+  const tracks = useSelector((state: RootState) => state.tracks);
+  const isShuffleActive = useSelector(
+    (state: RootState) => state.isShuffleActive,
+  );
+  const isAutoPlayEnabled = useSelector(
+    (state: RootState) => state.isAutoPlayEnabled,
+  );
+  const isPlaylistLoopEnabled = useSelector(
+    (state: RootState) => state.isPlaylistLoopEnabled,
+  );
 
   const sensors = useSensors(
     useSensor(TouchSensor),

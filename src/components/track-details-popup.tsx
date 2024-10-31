@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 
 import {
   formatDuration,
@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogHeader,
   DialogContent,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 import {
@@ -21,20 +22,13 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerContent,
+  DrawerDescription,
 } from "@/components/ui/drawer";
 
 import { Button } from "@/components/ui/button";
 import type { Track } from "@/types/mediaTypes";
 import { AudioIcon, VideoIcon } from "@/assets";
 import { useScreenWidth } from "@/hooks/useScreenWidth";
-
-// PopupWrapper Props Type
-interface PopupWrapperProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  isDesktop: boolean;
-  children: ReactNode;
-}
 
 // TrackInfo Props Type (Only used properties from Track)
 type TrackInfoProps = Pick<
@@ -53,23 +47,6 @@ interface TrackDetailsPopupProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-// PopupWrapper Component with Desktop/Mobile Toggle
-const PopupWrapper: FC<PopupWrapperProps> = ({
-  open,
-  children,
-  isDesktop,
-  onOpenChange,
-}) =>
-  isDesktop ? (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      {children}
-    </Dialog>
-  ) : (
-    <Drawer open={open} onOpenChange={onOpenChange}>
-      {children}
-    </Drawer>
-  );
 
 // TrackInfo Component for Displaying Track Details
 const TrackInfo: FC<TrackInfoProps> = ({
@@ -128,37 +105,46 @@ const TrackDetailsPopup: FC<TrackDetailsPopupProps> = ({
 }) => {
   const isDesktop = useScreenWidth(600);
 
-  return (
-    <PopupWrapper open={open} onOpenChange={onOpenChange} isDesktop={isDesktop}>
-      {isDesktop ? (
+  if (isDesktop)
+    return (
+      <Dialog
+        open={open}
+        onOpenChange={onOpenChange}
+        aria-describedby="Track's Description"
+      >
         <DialogContent className="rounded-md p-4 shadow-lg sm:max-w-[425px]">
           <DialogHeader className="mx-4 text-left">
             <DialogTitle className="flex items-center gap-4">
-              <span className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                {truncateTrackName(track.name)}
-              </span>
+              {truncateTrackName(track.name)}
             </DialogTitle>
+            <DialogDescription></DialogDescription>
           </DialogHeader>
           <TrackInfo {...track} />
         </DialogContent>
-      ) : (
-        <DrawerContent className="rounded-md p-4 shadow-lg">
-          <DrawerHeader className="text-left">
-            <DrawerTitle className="flex items-center gap-4">
-              <span className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                {truncateTrackName(track.name)}
-              </span>
-            </DrawerTitle>
-          </DrawerHeader>
-          <TrackInfo {...track} />
-          <DrawerFooter className="flex justify-end pt-4">
-            <DrawerClose asChild>
-              <Button variant="outline">Close</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      )}
-    </PopupWrapper>
+      </Dialog>
+    );
+
+  return (
+    <Drawer
+      open={open}
+      onOpenChange={onOpenChange}
+      aria-describedby="Track's Description"
+    >
+      <DrawerContent className="rounded-md p-4 shadow-lg">
+        <DrawerHeader className="text-left">
+          <DrawerTitle className="flex items-center gap-4">
+            {truncateTrackName(track.name)}
+          </DrawerTitle>
+          <DrawerDescription></DrawerDescription>
+        </DrawerHeader>
+        <TrackInfo {...track} />
+        <DrawerFooter className="flex justify-end pt-4">
+          <DrawerClose asChild>
+            <Button variant="outline">Close</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

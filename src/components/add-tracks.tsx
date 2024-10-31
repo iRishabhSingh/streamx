@@ -26,8 +26,10 @@ const AddTracks = () => {
   const dispatch = useDispatch();
 
   // Access playlist from the Redux state
-  const playlist = useSelector((state: RootState) => state);
-  const { tracks, isPlaylistPlaying } = playlist;
+  const tracks = useSelector((state: RootState) => state.tracks);
+  const isPlaylistPlaying = useSelector(
+    (state: RootState) => state.isPlaylistPlaying,
+  );
 
   // Filter valid audio/video files and dispatch them
   const handleFileChange = (newFiles: File[]): void => {
@@ -70,7 +72,7 @@ const AddTracks = () => {
   // Render playlist view with controls
   const renderPlaylistView = () => (
     <>
-      <Playlist playlist={playlist} />
+      <Playlist />
       <div className="mt-4 flex items-center justify-end gap-4">
         <Button
           size="icon"
